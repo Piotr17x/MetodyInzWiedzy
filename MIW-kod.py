@@ -336,8 +336,38 @@ def wart_wlasne(mat):
     for a in range(20):
         Q, R = rozkład_qr(A)
         A = Q.T.dot(A).dot(Q)
-    return [A[x, x] for x in range(len(A))], np.linalg.eigvals(mat)
+    return [A[x, x] for x in range(len(A))]
 
 
 print(wart_wlasne(matr))
+print('------------------------------ wektory własne')
+
+print(np.linalg.eig(matr)[1])
+
+print('------------------------------ SVD')
+
+mat22 =[[5, -1],
+        [5, 7]]
+
+
+def svd_dec(mat):
+    macierz = np.asarray(mat)
+    w_w = wart_wlasne(macierz.dot(macierz.T))
+    w_s=[]
+    for n in w_w:
+        w_s.append(n**(1/2))
+    sigma = np.diag(w_s)
+    macierz_w_w = np.linalg.eig(macierz.dot(macierz.T))[1].T*-1
+    V = np.asarray(np.array([magnitude(macierz_w_w[0])]).T)
+    for i in range(1, len(macierz_w_w)):
+        V = np.append(V, np.array([magnitude(macierz_w_w[i])]).T, axis=1)
+    U = np.asarray([np.multiply(1/w_s[-1], np.array(macierz.T).dot(V[:, 0]))]).T
+    for i in range(1, len(macierz_w_w)):
+        r = len(macierz_w_w)-1-i
+        U = np.append(U, np.array([np.multiply(1/w_s[r], np.array(macierz.T).dot(V[:, i]))]).T, axis=1)
+    return U, sigma, V.T
+
+
+print(svd_dec(mat22))
+
 print('------------------------------')
