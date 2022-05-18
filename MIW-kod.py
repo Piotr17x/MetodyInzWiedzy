@@ -370,4 +370,33 @@ def svd_dec(mat):
 
 print(svd_dec(mat22))
 
+print('------------------------------normalizacja bazy')
+
+# pomnożyc z transpozycją
+
+b=[[1, 1, 1, 1, 1, 1, 1, 1],
+   [1, 1, 1, 1, -1, -1, -1, -1],
+   [1, 1, -1, -1, 0, 0, 0, 0],
+   [0, 0, 0, 0, 1, 1, -1, -1],
+   [1, -1, 0, 0, 0, 0, 0, 0],
+   [0, 0, 1, -1, 0, 0, 0, 0],
+   [0, 0, 0, 0, 1, -1, 0, 0],
+   [0, 0, 0, 0, 0, 0, 1, -1]]
+
+def normalizacja(mat):
+    new_macierz = np.asarray(mat)
+    mat_norm = np.asarray([magnitude(mat[0])])
+    for wektor in mat[1:]:
+        mat_norm = np.append(mat_norm, [magnitude(wektor)], axis=0)
+    return mat_norm
+
+
+
+print(normalizacja(b))
+
+print('------------------------------ wektor w innej bazie')
+wek = np.asarray([[8,6,2,3,4,6,6,5]])
+
+print(wek.dot(normalizacja(b)))
+
 print('------------------------------')
