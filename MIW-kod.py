@@ -352,19 +352,16 @@ mat22 =[[5, -1],
 
 def svd_dec(mat):
     macierz = np.asarray(mat)
-    w_w = wart_wlasne(macierz.dot(macierz.T))
+    w_w = wart_wlasne(macierz.T.dot(macierz))
     w_s=[]
-    for n in w_w:
+    for n in np.sort(w_w)[::-1]:
         w_s.append(n**(1/2))
     sigma = np.diag(w_s)
-    macierz_w_w = np.linalg.eig(macierz.dot(macierz.T))[1].T*-1
-    V = np.asarray(np.array([magnitude(macierz_w_w[0])]).T)
+    macierz_w_w = np.linalg.eig(macierz.dot(macierz.T))[1].T
+    U = np.asarray(np.array([magnitude(macierz_w_w[0])]).T)
     for i in range(1, len(macierz_w_w)):
-        V = np.append(V, np.array([magnitude(macierz_w_w[i])]).T, axis=1)
-    U = np.asarray([np.multiply(1/w_s[-1], np.array(macierz.T).dot(V[:, 0]))]).T
-    for i in range(1, len(macierz_w_w)):
-        r = len(macierz_w_w)-1-i
-        U = np.append(U, np.array([np.multiply(1/w_s[r], np.array(macierz.T).dot(V[:, i]))]).T, axis=1)
+        U = np.append(U, np.array([magnitude(macierz_w_w[i])]).T, axis=1)
+    V = macierz.T.dot(U.T[::-1]).dot(np.linalg.inv(sigma))
     return U, sigma, V.T
 
 
